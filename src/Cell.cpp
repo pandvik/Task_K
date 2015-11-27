@@ -17,10 +17,6 @@ bool Cell::isNumber()
     return false;
 }
 
-string Cell::getString()
-{
-    return "";
-}
 int Cell::getNumber()
 {
     return 0;

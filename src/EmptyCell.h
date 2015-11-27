@@ -1,26 +1,24 @@
-#ifndef CELL_H
-#define CELL_H
+#ifndef EMPTYcELL_H
+#define EMPTYcELL_H
 #include <stdio.h>
 #include <stdlib.h>
 
 #include <iostream>
-#include <exception>
+
+#include "Cell.h"
 
 using namespace std;
 
-class Cell
+class EmptyCell: public Cell
 {
 public:
+    EmptyCell();
+
     virtual bool compute();
     
-    /*
-    * Test type of cell
-    */
     virtual bool isEmpty();
     virtual bool isString();
-    virtual bool isExpression();
     virtual bool isNumber();
-    
     /*
     * Get result after computing
     */     
@@ -29,15 +27,8 @@ public:
     * Return source number if isNumber==true
     */ 
     virtual int getNumber();
-    virtual ~Cell();
-    /*
-    * Exception wich throw if getNumber or getString can't be executed 
-    */ 
-    class IncorrectGetTypeException: public exception
-    {
-        virtual const char* what() const throw();
-    };
     
+    virtual ~EmptyCell();
 };
 
 

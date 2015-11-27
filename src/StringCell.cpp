@@ -3,24 +3,50 @@
 
 bool StringCell::compute()
 {
-    
+    // If it was not computed
+    if (!this->computed)
+    {
+        // If the string begin with '
+        if (this->data[0] == '\'')
+        {
+            // Delete first simbol
+            this->data = this->data.substr(1);
+            this->computed = true;            
+        }
+        else
+        {
+            this->error = true;
+            this->data = "#incorrectCell";
+            return false;
+        }
+    }
+    return true;   
 }
-void StringCell::StringCell(string src)
+
+StringCell::StringCell(string str)
 {
-    this.dataSource = str;
+    this->computed = false;
+    this->error = false;
+    this->data = str;
 }
+
 bool StringCell::isString()
 {
-    return true;
+    // try to compute
+    this->compute();
+    
+    // if there is error then it is not string
+    return this->error ? false : true;
 }
+
 string StringCell::getResult()
 {
-    return this.dataResult;
+    // try to compute
+    this->compute();
+    
+    return this->data;
 }
-string StringCell::getString()
-{
-    return this.dataResult;
-}
-~StringCell::StringCell()
+
+StringCell::~StringCell()
 {
 }

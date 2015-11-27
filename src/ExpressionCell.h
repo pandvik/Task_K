@@ -1,5 +1,5 @@
-#ifndef STRINGcELL_H
-#define STRINGcELL_H
+#ifndef EXPRESSIONcELL_H
+#define EXPRESSIONcELL_H
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -9,23 +9,28 @@
 
 using namespace std;
 
-class StringCell: public Cell
+class ExpressionCell: public Cell
 {
+    bool computed;
     bool error;
     string data;
-    bool computed;
 public:
-    StringCell(string src);
+    ExpressionCell(string src);
 
     virtual bool compute();
     
     virtual bool isString();
+    virtual bool isNumber();
     /*
     * Get result after computing
     */     
     virtual string getResult();
+    /*
+    * Return source number if isNumber==true
+    */ 
+    virtual int getNumber();
     
-    virtual ~StringCell();
+    virtual ~ExpressionCell();
 };
 
 

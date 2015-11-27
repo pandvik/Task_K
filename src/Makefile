@@ -1,7 +1,7 @@
 
 CC=g++
 CFLAGS=-c -Wall
-SOURCES=Cell.cpp
+SOURCES=Cell.cpp StringCell.cpp EmptyCell.cpp ExpressionCell.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=task_k
 
