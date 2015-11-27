@@ -26,10 +26,14 @@ class ExpressionCell: public Cell
     int data_int;
     // Saved lambda function for getting cell from table
     GetCellLambda getCell;
+    // Locking compute method for exclude recursive loop
+    bool block;
+
 public:
     ExpressionCell(string src, GetCellLambda getCell);
 
     virtual bool compute();
+    bool _compute();
     
     virtual bool isString();
     virtual bool isNumber();

@@ -38,6 +38,15 @@ pair<int, int> parseCellCoordinate(string str)
 
 bool ExpressionCell::compute()
 {
+    if (this->block)
+        return false;
+    this->block = true;
+    bool ret = this->compute();
+    this->block = false;
+    return ret;
+}
+bool ExpressionCell::_compute()
+{
     if (this->computed)
         return this->error ? false : true;
 
@@ -66,7 +75,7 @@ bool ExpressionCell::compute()
                 pair<int, int> cellCoord = parseCellCoordinate(rightArg);
                 Cell *cell = getCell(cellCoord.first, cellCoord.second);
                 // if cell not found or cell can't be computed => error
-                if (cell == NULL || !cell->compute())
+                if (cell == NULL || !cell->compute() || !cell->isNumber())
                 {
                     this->error = true;
                     this->computed = true;

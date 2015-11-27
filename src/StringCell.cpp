@@ -4,23 +4,23 @@
 bool StringCell::compute()
 {
     // If it was not computed
-    if (!this->computed)
+    if (this->computed)
+        return this->error ? false : true;
+    
+    // If the string begin with '
+    if (this->data[0] == '\'')
     {
-        // If the string begin with '
-        if (this->data[0] == '\'')
-        {
-            // Delete first simbol
-            this->data = this->data.substr(1);
-            this->computed = true;            
-        }
-        else
-        {
-            this->error = true;
-            this->data = "#incorrectCell";
-            return false;
-        }
+        // Delete first simbol
+        this->data = this->data.substr(1);
+        this->computed = true;            
+        return true;
     }
-    return true;   
+    else
+    {
+        this->error = true;
+        this->data = "#incorrectCell";
+        return false;
+    }
 }
 
 StringCell::StringCell(string str)
