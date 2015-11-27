@@ -17,6 +17,10 @@ bool ExpressionCell::isString()
 {
     return false;
 }
+bool ExpressionCell::isNumber()
+{
+    return true;
+}
 
 string ExpressionCell::getResult()
 {

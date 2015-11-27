@@ -19,6 +19,7 @@ bool Cell::isNumber()
 
 int Cell::getNumber()
 {
+    throw new IncorrectGetTypeException;
     return 0;
 }
 
