@@ -1,87 +1,99 @@
 #include "Table.h"
 
+
+Size2d::Size2d(int sizex, int sizey)
+{
+    this->sizex = sizex;
+    this->sizey = sizey;
+}
+
 Table::Table()
 {
-    table = NULL;
 }
-bool Table::read(istream inputStream)
+void Table::read(istream &inputStream)
 {
-    string buff;
-    char t;
-    // skip spaces
-    for(;(t=inputStream.get())==' ';) {;}
-    // read number
-    for(;(t=inputStream.get())!=' ';)
+    size = read_size(inputStream); 
+    cout<<size.sizex<<size.sizey<<endl;
+    // read lines
+    vector<char> buff;
+    int t;
+    for (int lineNumber=0; lineNumber < size.sizey; lineNumber++)
     {
-        if (isdigit(t))
-            buff.push_back(t);
-        else // =='\n'
+        for (int colNumber=0; colNumber < size.sizex; colNumber++)
         {
-            cout<<"Error while reading size of table."<<endl;
-            return false;
+            for(t = inputStream.get();
+                t != '\t' && t != '\n' && t != EOF;
+                t = inputStream.get()) 
+            { buff.push_back(t); }
+            
+            if ( (t == '\n' || t == EOF) && 
+                (colNumber < (size.sizex-1) ) ) // not last column
+            {
+                // TODO: add row number
+                throw (runtime_error("Some cells are missing on row"));
+            }
+            
+            buff.push_back('\0');
+            
+            addCell(string(buff.data()), colNumber, lineNumber);
+    
+            buff.clear();
         }
-    }
-    int sizeX = atoi(buff.c_str());
-    buff.clear();
-    
-    // read number
-    for(;(t=inputStream.get())!=' ' && t!='\n';)
-    {
-        if (isdigit(t))
-            buff.push_back(t);
-        else // =='\n'
-        {
-            cout<<"Error while reading size of table."<<endl;
-            return false;
-        }
-    }
-    int sizeY = atoi(buff.c_str());
-    buff.clear();
-    
-    // Alloc memory for table 
-    table = new Cell** [sizeY];
-    for (int i=0; i < sizeY; i++)
-    {
-        table[i] = new Cell**[sizeX];
-        for (int j=0; j < sizeX; j++)
-            table[i][j] = NULL;
-    }
-
-    auto ln_table = table;
-    auto getCell = [ln_table, sizeX, sizeY](int x, int y){
-        if (x <= 0 
-            || x > sizeX
-            || y <= 0
-            || y < sizeY )
-            return (Cell*)NULL;
-        return ln_table[y-1][x-1];
-    };
-    
-    // read table    
-    for(int row = 0; row < sizeY; row++)
-    {
-        char t;
-        for(int col = 0; (t=inputStream.get())!='\n' && t != EOF && col < sizeX; )
-        {
-            // TODO: 
-        }       
         
+        if (t != '\n' && t != EOF) // if there are else cells on this row
+        {
+            // TODO: add row number
+            throw (runtime_error("There are some excess cells on row"));
+        }   
+        if (t == EOF && 
+            lineNumber < (size.sizey - 1)) // not last row
+        {
+            throw (runtime_error("Some rows are missing"));
+        }
     }
-
-    
-}
-
-bool Table::write(ostream outputStream)
-{
- ;   
+    if (t != EOF && inputStream.get() != EOF) // there are else rows 
+    {
+        throw (runtime_error("There are some excess rows"));
+    }
 }
 bool Table::compute()
 {
-    
+    return true;
+}
+void Table::write(ostream &outputStream)
+{
 }
 Table::~Table()
 {
 }
 
 
+Size2d Table::read_size(istream &inputStream)
+{
+    int buff_size = 256;
+    char buff[buff_size];
+    
+    inputStream.getline(buff, buff_size);
+    if (!inputStream.good())
+    {
+        throw (runtime_error("Error in input stream"));
+    }
+    
+    std::regex pieces_regex("([0-9]+) ([0-9]+)\0");
+    std::smatch pieces_match;
+    if (std::regex_match(string(buff), pieces_match, pieces_regex)) 
+    {
+        std::string piece1 = pieces_match[1].str();
+        std::string piece2 = pieces_match[2].str();
+        
+        return Size2d(stoi(piece2), stoi(piece1));
+    }
+    throw (runtime_error("Error while parsing first string"));
+}
+
+
+void Table::addCell(string data, int posX, int posY)
+{
+    cout<<"Cell "<<posX<<" "<<posY<<" : \'"<<data<<"\'"<<endl;
+}
 
