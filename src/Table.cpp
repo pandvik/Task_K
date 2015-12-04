@@ -13,7 +13,14 @@ Table::Table()
 void Table::read(istream &inputStream)
 {
     size = read_size(inputStream); 
-    cout<<size.sizex<<size.sizey<<endl;
+    
+    table = new Cell**[size.sizey];
+    for (int i=0; i<size.sizey; i++)
+        table[i] = new Cell*[size.sizex];
+    for (int i=0; i<size.sizey; i++)
+        for (int j=0; j<size.sizex; j++)
+            table[i][j] = NULL;
+    
     // read lines
     vector<char> buff;
     int t;
@@ -58,10 +65,22 @@ void Table::read(istream &inputStream)
 }
 bool Table::compute()
 {
+    for (int i=0; i<size.sizey; i++)
+        for (int j=0; j<size.sizex; j++)
+            table[i][j]->compute();
     return true;
 }
 void Table::write(ostream &outputStream)
 {
+    for (int i=0; i<size.sizey; i++)
+    {
+        for (int j=0; j<size.sizex; j++)
+        {
+            table[i][j]->compute();
+            outputStream<<table[i][j]->getString()<<"\t";
+        }
+        outputStream<<endl;
+    }
 }
 Table::~Table()
 {
@@ -94,6 +113,16 @@ Size2d Table::read_size(istream &inputStream)
 
 void Table::addCell(string data, int posX, int posY)
 {
-    cout<<"Cell "<<posX<<" "<<posY<<" : \'"<<data<<"\'"<<endl;
+    table[posY][posX] = new Cell(data);
 }
+
+
+Cell* Table::getCell(int x, int y)
+{
+    if (x<0 || y<0 || x>=size.sizex || y>=size.sizey)
+        return NULL;
+    return table[y][x];
+    
+}
+
 

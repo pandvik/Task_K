@@ -1,8 +1,8 @@
 
-CC=g++
+CC=g++ -g 
 CFLAGS=-c -Wall --std=c++11
 LDFLAGS=
-SOURCES=main.cpp Table.cpp
+SOURCES=main.cpp Table.cpp Cell.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=task_k
 
@@ -12,6 +12,9 @@ $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
 
 Table.o: Table.cpp Table.h
+	$(CC) $(CFLAGS) $< -o $@
+
+Cell.o: Cell.cpp Cell.h
 	$(CC) $(CFLAGS) $< -o $@
 
 main.o: main.cpp 

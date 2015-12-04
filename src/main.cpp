@@ -8,11 +8,16 @@
 
 using namespace std;
 
+Table GLOBAL_TABLE;
+
 int main (int argc, char **argv)
 {
     ifstream iss(argv[1]);
-    Table tt;
-    tt.read(iss);
+    GLOBAL_TABLE.read(iss);
+    GLOBAL_TABLE.compute();
+    GLOBAL_TABLE.write(cout);
+    
+    
 
     return 0;
 }
